@@ -236,6 +236,11 @@
     dt->shared->u.atomic.u.r.rtype = H5R_DATASET_REGION;		      \
 }
 
+#define H5T_INIT_TYPE_ATTRREF_CORE {					      \
+    H5T_INIT_TYPE_REF_COMMON						      \
+    dt->shared->u.atomic.u.r.rtype = H5R_ATTR;				      \
+}
+
 /* Define the code templates for the "SIZE_TMPL" in the H5T_INIT_TYPE macro */
 #define H5T_INIT_TYPE_SET_SIZE(SIZE) {					      \
     dt->shared->size = SIZE;						      \
@@ -345,6 +350,7 @@ hid_t H5T_STD_B64BE_g			= FAIL;
 hid_t H5T_STD_B64LE_g 			= FAIL;
 hid_t H5T_STD_REF_OBJ_g 		= FAIL;
 hid_t H5T_STD_REF_DSETREG_g 		= FAIL;
+hid_t H5T_STD_REF_ATTR_g 		= FAIL;
 
 hid_t H5T_UNIX_D32BE_g			= FAIL;
 hid_t H5T_UNIX_D32LE_g			= FAIL;
@@ -435,6 +441,7 @@ size_t H5T_POINTER_COMP_ALIGN_g	                = 0;
 size_t H5T_HVL_COMP_ALIGN_g	                = 0;
 size_t H5T_HOBJREF_COMP_ALIGN_g	                = 0;
 size_t H5T_HDSETREGREF_COMP_ALIGN_g	        = 0;
+size_t H5T_HATTRREF_COMP_ALIGN_g                = 0;
 
 /*
  * Alignment constraints for native types. These are initialized at run time
@@ -1026,6 +1033,9 @@ H5T_init_interface(void)
     /* Dataset Region reference (i.e. selection inside a dataset) */
     H5T_INIT_TYPE(REGREF, H5T_STD_REF_DSETREG_g, ALLOC, -, SET, H5R_DSET_REG_REF_BUF_SIZE)
 
+    /* Attribute reference (i.e. object and attribute names in file) */
+    H5T_INIT_TYPE(ATTRREF, H5T_STD_REF_ATTR_g, ALLOC, -, SET, H5R_ATTR_REF_BUF_SIZE)
+
     /*
      * Register conversion functions beginning with the most general and
      * ending with the most specific.
@@ -1478,6 +1488,7 @@ H5T_term_interface(void)
         H5T_STD_B64LE_g 			= FAIL;
         H5T_STD_REF_OBJ_g 		= FAIL;
         H5T_STD_REF_DSETREG_g 		= FAIL;
+        H5T_STD_REF_ATTR_g 		= FAIL;
 
         H5T_UNIX_D32BE_g			= FAIL;
         H5T_UNIX_D32LE_g			= FAIL;
@@ -4307,6 +4318,11 @@ H5T_cmp(const H5T_t *dt1, const H5T_t *dt2, hbool_t superset)
 
                         case H5R_DATASET_REGION:
                     /* Does this need more to distinguish it? -QAK 11/30/98 */
+                            /*void */
+                            break;
+
+                        case H5R_ATTR:
+                    /* Does this need more to distinguish it? -QAK 8/25/15 */
                             /*void */
                             break;
 
