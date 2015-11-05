@@ -157,8 +157,8 @@
 /* Define to 1 if you have the `gettimeofday' function. */
 #cmakedefine H5_HAVE_GETTIMEOFDAY @H5_HAVE_GETTIMEOFDAY@
 
-/* Define to 1 if you have the `get_fpc_csr' function. */
-#cmakedefine H5_HAVE_GET_FPC_CSR @H5_HAVE_GET_FPC_CSR@
+/* Define if the compiler understands inline */
+#cmakedefine H5_HAVE_INLINE @H5_HAVE_INLINE@
 
 /* Define if library will contain instrumentation to detect correct
    optimization operation */
@@ -185,14 +185,8 @@
 /* Define to 1 if you have the `mpe' library (-lmpe). */
 #cmakedefine H5_HAVE_LIBMPE @H5_HAVE_LIBMPE@
 
-/* Define to 1 if you have the `nsl' library (-lnsl). */
-#cmakedefine H5_HAVE_LIBNSL @H5_HAVE_LIBNSL@
-
 /* Define to 1 if you have the `pthread' library (-lpthread). */
 #cmakedefine H5_HAVE_LIBPTHREAD @H5_HAVE_LIBPTHREAD@
-
-/* Define to 1 if you have the `socket' library (-lsocket). */
-#cmakedefine H5_HAVE_LIBSOCKET @H5_HAVE_LIBSOCKET@
 
 /* Define to 1 if you have the `sz' library (-lsz). */
 #cmakedefine H5_HAVE_LIBSZ @H5_HAVE_LIBSZ@
@@ -311,14 +305,8 @@
 /* Define to 1 if you have the `system' function. */
 #cmakedefine H5_HAVE_SYSTEM @H5_HAVE_SYSTEM@
 
-/* Define to 1 if you have the <sys/fpu.h> header file. */
-#cmakedefine H5_HAVE_SYS_FPU_H @H5_HAVE_SYS_FPU_H@
-
 /* Define to 1 if you have the <sys/ioctl.h> header file. */
 #cmakedefine H5_HAVE_SYS_IOCTL_H @H5_HAVE_SYS_IOCTL_H@
-
-/* Define to 1 if you have the <sys/proc.h> header file. */
-#cmakedefine H5_HAVE_SYS_PROC_H @H5_HAVE_SYS_PROC_H@
 
 /* Define to 1 if you have the <sys/resource.h> header file. */
 #cmakedefine H5_HAVE_SYS_RESOURCE_H @H5_HAVE_SYS_RESOURCE_H@
@@ -328,9 +316,6 @@
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #cmakedefine H5_HAVE_SYS_STAT_H @H5_HAVE_SYS_STAT_H@
-
-/* Define to 1 if you have the <sys/sysinfo.h> header file. */
-#cmakedefine H5_HAVE_SYS_SYSINFO_H @H5_HAVE_SYS_SYSINFO_H@
 
 /* Define to 1 if you have the <sys/timeb.h> header file. */
 #cmakedefine H5_HAVE_SYS_TIMEB_H @H5_HAVE_SYS_TIMEB_H@
@@ -388,6 +373,12 @@
 
 /* Define to 1 if you have the `_scrsize' function. */
 #cmakedefine H5_HAVE__SCRSIZE @H5_HAVE__SCRSIZE@
+
+/* Define if the compiler understands __inline */
+#cmakedefine H5_HAVE___INLINE @H5_HAVE___INLINE@
+
+/* Define if the compiler understands __inline__ */
+#cmakedefine H5_HAVE___INLINE__ @H5_HAVE___INLINE__@
 
 /* Define if HDF5's high-level library headers should be included in hdf5.h */
 #cmakedefine H5_INCLUDE_HL @H5_INCLUDE_HL@
@@ -581,6 +572,12 @@
 /* The size of `__int64', as computed by sizeof. */
 #define H5_SIZEOF___INT64 @H5_SIZEOF___INT64@
 
+/* Define to 1 if you have the <stdbool.h> header file. */
+#cmakedefine H5_HAVE_STDBOOL_H @H5_HAVE_STDBOOL_H@
+
+/* The size of `bool', as computed by sizeof. */
+#cmakedefine H5_SIZEOF_BOOL @H5_SIZEOF_BOOL@
+
 /* Define to 1 if you have the ANSI C header files. */
 #cmakedefine H5_STDC_HEADERS @H5_STDC_HEADERS@
 
@@ -636,12 +633,6 @@
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #cmakedefine H5_const
-
-/* Define to `__inline__' or `__inline' if that's what the C compiler
-   calls it, or to nothing if 'inline' is not supported under any name.  */
-#ifndef __cplusplus
-#cmakedefine H5_inline @H5_inline@
-#endif
 
 /* Define to `long int' if <sys/types.h> does not define. */
 #cmakedefine H5_off_t

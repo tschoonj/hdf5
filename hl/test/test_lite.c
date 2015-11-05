@@ -1196,7 +1196,7 @@ static int test_strings(void)
     H5T_str_t   str_pad;
     H5T_cset_t  str_cset;
     H5T_class_t type_class;
-    char*   dt_str;
+    char*   dt_str = NULL;
     size_t  str_len;
 
     TESTING3("        text for string types");
@@ -1282,6 +1282,7 @@ static int test_strings(void)
       HDfree(dt_str);
       goto out;
     }
+    HDfree(dt_str);
 
     /* Length of the character buffer is smaller then needed */
     str_len = 21;

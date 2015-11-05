@@ -14,6 +14,9 @@
  * access to either file, you may request a copy from help@hdfgroup.org.     *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+// Class DSetMemXferPropList represents the HDF5 dataset transfer property list
+// and inherits from PropList.
+
 #ifndef __H5DSetMemXferPropList_H
 #define __H5DSetMemXferPropList_H
 
@@ -27,7 +30,8 @@ namespace H5 {
 */
 class H5_DLLCPP DSetMemXferPropList : public PropList {
    public:
-	static const DSetMemXferPropList DEFAULT;
+	///\brief Default dataset memory and transfer property list.
+	static const DSetMemXferPropList& DEFAULT;
 
 	// Creates a dataset memory and transfer property list.
 	DSetMemXferPropList();
@@ -113,9 +117,21 @@ class H5_DLLCPP DSetMemXferPropList : public PropList {
 
 	// Noop destructor
 	virtual ~DSetMemXferPropList();
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+        // Deletes the global constant, should only be used by the library
+        static void deleteConstants();
+
+    private:
+	static DSetMemXferPropList* DEFAULT_;
+
+        // Creates the global constant, should only be used by the library
+        static DSetMemXferPropList* getConstant();
+
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 };
 #ifndef H5_NO_NAMESPACE
 }
 #endif
 #endif // __H5DSetMemXferPropList_H
-

@@ -24,7 +24,7 @@
  * This file needs to access private information from the H5G package.
  * This file also needs to access the group testing code.
  */
-#define H5G_PACKAGE
+#define H5G_FRIEND		/*suppress error about including H5Gpkg	  */
 #define H5G_TESTING
 
 #include "h5test.h"
@@ -3883,11 +3883,8 @@ external_set_elink_fapl3(hbool_t new_format)
     if(H5Pget(lapl_id, "external link fapl", &out_fapl) < 0) TEST_ERROR
     if(H5Pclose(lapl_id) < 0) TEST_ERROR
 
-    /* Try closing out_fapl should fail since H5Pclose(lapl_id) should also close its fapl */
-    H5E_BEGIN_TRY {
-        ret = H5Pclose(out_fapl);
-    } H5E_END_TRY;
-    if(ret != FAIL) TEST_ERROR
+    /* Try closing out_fapl, should succeed since H5Pget() should clone its fapl */
+    if(H5Pclose(out_fapl) < 0) TEST_ERROR
 
     /* Verify that the driver for the copied link's fapl is the "core" driver */
     if((l_fapl = H5Pget_elink_fapl(new_lapl_id)) < 0) TEST_ERROR
@@ -3897,11 +3894,8 @@ external_set_elink_fapl3(hbool_t new_format)
     if(H5Pget(new_lapl_id, "external link fapl", &out_fapl) < 0) TEST_ERROR
     if(H5Premove(new_lapl_id, "external link fapl") < 0) TEST_ERROR
 
-    /* Try closing out_fapl should fail since the property is removed from new_lapl_id */
-    H5E_BEGIN_TRY {
-        ret = H5Pclose(out_fapl);
-    } H5E_END_TRY;
-    if(ret != FAIL) TEST_ERROR
+    /* Try closing out_fapl, should succeed since H5Pget() should clone its fapl */
+    if(H5Pclose(out_fapl) < 0) TEST_ERROR
 
     if(H5Pclose(l_fapl) < 0) TEST_ERROR
     if(H5Pclose(new_lapl_id) < 0) TEST_ERROR
@@ -6240,7 +6234,7 @@ error:
 static int
 external_link_strong(hid_t fapl, hbool_t new_format)
 {
-    hid_t       my_fapl;                        /* File access property list */
+    hid_t       my_fapl = (-1);                 /* File access property list */
     hid_t       fid1 = (-1), fid2 = (-1);       /* File ID */
     hid_t       gid1 = (-1), gid2 = (-1);       /* Group IDs */
     char        objname[NAME_BUF_SIZE];         /* Object name */
@@ -6289,11 +6283,15 @@ external_link_strong(hid_t fapl, hbool_t new_format)
     if(H5Gclose(gid2) < 0) TEST_ERROR
     if(H5Fclose(fid2) < 0) TEST_ERROR
 
+    /* Close fapl */
+    if(H5Pclose(my_fapl) < 0) TEST_ERROR
+
     PASSED();
     return 0;
 
 error:
     H5E_BEGIN_TRY {
+        H5Pclose(my_fapl);
         H5Gclose(fapl);
         H5Gclose(gid2);
         H5Gclose(gid1);
@@ -10697,7 +10695,7 @@ corder_delete(hid_t fapl)
     unsigned    min_dense;              /* Minimum # of links to store in group "densely" */
     hsize_t     name_count;             /* # of records in name index */
     hsize_t     corder_count;           /* # of records in creation order index */
-    hbool_t     reopen_file;            /* Whether to re-open the file before deleting group */
+    unsigned    reopen_file;            /* Whether to re-open the file before deleting group */
     h5_stat_size_t       empty_size;             /* Size of empty file */
     h5_stat_size_t       file_size;              /* Size of file after operating on it */
     char        objname[NAME_BUF_SIZE]; /* Object name */
@@ -10978,8 +10976,8 @@ link_info_by_idx(hid_t fapl)
     hid_t	file_id = (-1); 	/* File ID */
     hid_t	group_id = (-1);	/* Group ID */
     hid_t       gcpl_id = (-1); 	/* Group creation property list ID */
-    hbool_t     hard_link;              /* Create hard or soft link? */
-    hbool_t     use_index;              /* Use index on creation order values */
+    unsigned    hard_link;              /* Create hard or soft link? */
+    unsigned    use_index;              /* Use index on creation order values */
     unsigned    max_compact;            /* Maximum # of links to store in group compactly */
     unsigned    min_dense;              /* Minimum # of links to store in group "densely" */
     H5L_info_t  linfo;                  /* Link info struct */
@@ -11161,7 +11159,7 @@ link_info_by_idx_old(hid_t fapl)
 {
     hid_t	file_id = (-1); 	/* File ID */
     hid_t	group_id = (-1), group_id2 = (-1);	/* Group IDs */
-    hbool_t     hard_link;              /* Create hard or soft link? */
+    unsigned    hard_link;              /* Create hard or soft link? */
     H5L_info_t  linfo;                  /* Link info struct */
     char        objname[NAME_BUF_SIZE]; /* Object name */
     char        valname[NAME_BUF_SIZE]; /* Link value name */
@@ -11330,7 +11328,7 @@ delete_by_idx(hid_t fapl)
     hid_t       gcpl_id = (-1); 	/* Group creation property list ID */
     H5_index_t idx_type;               /* Type of index to operate on */
     H5_iter_order_t order;              /* Order within in the index */
-    hbool_t     use_index;              /* Use index on creation order values */
+    unsigned    use_index;              /* Use index on creation order values */
     unsigned    max_compact;            /* Maximum # of links to store in group compactly */
     unsigned    min_dense;              /* Minimum # of links to store in group "densely" */
     H5L_info_t  linfo;                  /* Link info struct */
@@ -12163,7 +12161,7 @@ link_iterate(hid_t fapl)
     hid_t       gcpl_id = (-1); 	/* Group creation property list ID */
     H5_index_t idx_type;               /* Type of index to operate on */
     H5_iter_order_t order;              /* Order within in the index */
-    hbool_t     use_index;              /* Use index on creation order values */
+    unsigned    use_index;              /* Use index on creation order values */
     unsigned    max_compact;            /* Maximum # of links to store in group compactly */
     unsigned    min_dense;              /* Minimum # of links to store in group "densely" */
     char        objname[NAME_BUF_SIZE]; /* Object name */
@@ -12849,7 +12847,7 @@ open_by_idx(hid_t fapl)
     hid_t       gcpl_id = (-1); 	/* Group creation property list ID */
     H5_index_t idx_type;               /* Type of index to operate on */
     H5_iter_order_t order;              /* Order within in the index */
-    hbool_t     use_index;              /* Use index on creation order values */
+    unsigned    use_index;              /* Use index on creation order values */
     unsigned    max_compact;            /* Maximum # of links to store in group compactly */
     unsigned    min_dense;              /* Minimum # of links to store in group "densely" */
     H5O_info_t  oi;                     /* Buffer for querying object's info */
@@ -13285,7 +13283,7 @@ object_info(hid_t fapl)
     hid_t       space_id = (-1);        /* Dataspace ID (for attributes) */
     H5_index_t idx_type;               /* Type of index to operate on */
     H5_iter_order_t order;              /* Order within in the index */
-    hbool_t     use_index;              /* Use index on creation order values */
+    unsigned    use_index;              /* Use index on creation order values */
     unsigned    max_compact;            /* Maximum # of links to store in group compactly */
     unsigned    min_dense;              /* Minimum # of links to store in group "densely" */
     H5O_info_t  oinfo;                  /* Buffer for querying object's info */
@@ -13681,7 +13679,7 @@ group_info(hid_t fapl)
     hid_t       gcpl_id = (-1); 	/* Group creation property list ID */
     H5_index_t idx_type;               /* Type of index to operate on */
     H5_iter_order_t order;              /* Order within in the index */
-    hbool_t     use_index;              /* Use index on creation order values */
+    unsigned    use_index;              /* Use index on creation order values */
     unsigned    max_compact;            /* Maximum # of links to store in group compactly */
     unsigned    min_dense;              /* Minimum # of links to store in group "densely" */
     H5G_info_t  grp_info;               /* Buffer for querying object's info */
@@ -14492,8 +14490,8 @@ main(void)
 {
     hid_t	fapl, fapl2;    /* File access property lists */
     int	nerrors = 0;
-    hbool_t new_format;     /* Whether to use the new format or not */
-    hbool_t efc;            /* Whether to use the external file cache */
+    unsigned new_format;    /* Whether to use the new format or not */
+    unsigned efc;           /* Whether to use the external file cache */
     const char  *env_h5_drvr;      /* File Driver value from environment */
 
     env_h5_drvr = HDgetenv("HDF5_DRIVER");

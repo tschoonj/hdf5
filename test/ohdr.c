@@ -24,14 +24,14 @@
  * This file needs to access private datatypes from the H5O package.
  * This file also needs to access the object header testing code.
  */
-#define H5O_PACKAGE
+#define H5O_FRIEND		/*suppress error about including H5Opkg	  */
 #define H5O_TESTING
 #include "H5Opkg.h"
 
 /*
  * This file needs to access private datatypes from the H5G package.
  */
-#define H5G_PACKAGE
+#define H5G_FRIEND		/*suppress error about including H5Gpkg	  */
 #include "H5Gpkg.h"
 
 const char *FILENAME[] = {
@@ -321,7 +321,7 @@ main(void)
     time_t	time_new, ro;
     int         chunkno;                /* Chunk index for message */
     int		i;                      /* Local index variable */
-    hbool_t     b;                      /* Index for "new format" loop */
+    unsigned    b;                      /* Index for "new format" loop */
     herr_t      ret;                    /* Generic return value */
 
     /* Reset library */

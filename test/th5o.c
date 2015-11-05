@@ -164,7 +164,7 @@ test_h5o_close(void)
     /* Create the group and close it with H5Oclose */
     grp = H5Gcreate2(fid, "group", H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     CHECK(grp, FAIL, "H5Gcreate2");
-    VERIFY(H5Iget_type(grp), H5I_GROUP, "H5Iget_type");
+    VERIFY_TYPE(H5Iget_type(grp), H5I_GROUP, H5I_type_t, "%d", "H5Iget_type");
     ret = H5Oclose(grp);
     CHECK(ret, FAIL, "H5Oclose");
 
@@ -776,7 +776,7 @@ test_h5o_link(void)
     hid_t lcpl_id=-1;
     hsize_t dims[2] = {TEST6_DIM1, TEST6_DIM2};
     htri_t committed;           /* Whether the named datatype is committed */
-    hbool_t new_format;         /* Whether to use the new format or not */
+    unsigned new_format;        /* Whether to use the new format or not */
     int wdata[TEST6_DIM1][TEST6_DIM2];
     int rdata[TEST6_DIM1][TEST6_DIM2];
     int i, n, j;

@@ -14,6 +14,9 @@
  * access to either file, you may request a copy from help@hdfgroup.org.     *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+// Class FileAccPropList represents the HDF5 file access property list and
+// inherits from DataType.
+
 #ifndef __H5FileAccPropList_H
 #define __H5FileAccPropList_H
 
@@ -24,7 +27,8 @@ namespace H5 {
 //! Class FileAccPropList represents the HDF5 file access property list.
 class H5_DLLCPP FileAccPropList : public PropList {
    public:
-	static const FileAccPropList DEFAULT;
+	///\brief Default file access property list.
+	static const FileAccPropList& DEFAULT;
 
 	// Creates a file access property list.
 	FileAccPropList();
@@ -145,6 +149,20 @@ class H5_DLLCPP FileAccPropList : public PropList {
 
 	// Noop destructor
 	virtual ~FileAccPropList();
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+        // Deletes the global constant, should only be used by the library
+        static void deleteConstants();
+
+    private:
+        static FileAccPropList* DEFAULT_;
+
+        // Creates the global constant, should only be used by the library
+        static FileAccPropList* getConstant();
+
+#endif // DOXYGEN_SHOULD_SKIP_THIS
+
 };
 #ifndef H5_NO_NAMESPACE
 }

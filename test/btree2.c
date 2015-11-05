@@ -22,7 +22,7 @@
  * This file needs to access private datatypes from the H5B2 package.
  * This file also needs to access the v2 B-tree testing code.
  */
-#define H5B2_PACKAGE
+#define H5B2_FRIEND		/*suppress error about including H5B2pkg	  */
 #define H5B2_TESTING
 #include "H5B2pkg.h"
 
@@ -7625,7 +7625,7 @@ main(void)
     bt2_test_param_t tparam;            /* Test parameters for v2 B-tree */
     hid_t	fapl = -1;              /* File access property list for data files */
     unsigned	nerrors = 0;            /* Cumulative error count */
-    hbool_t     reopen;                 /* Whether to reopen B-tree during tests */
+    unsigned    reopen;                 /* Whether to reopen B-tree during tests */
     int		ExpressMode;
     const char  *envval = NULL;
 

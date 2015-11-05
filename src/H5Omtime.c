@@ -19,7 +19,8 @@
  * Purpose:	The object modification time message.
  */
 
-#define H5O_PACKAGE		/*suppress error about including H5Opkg	  */
+#include "H5Omodule.h"          /* This source code file is part of the H5O module */
+
 
 #include "H5private.h"		/* Generic Functions			*/
 #include "H5Eprivate.h"		/* Error handling		  	*/
@@ -41,7 +42,7 @@ static size_t H5O_mtime_size(const H5F_t *f, hbool_t disable_shared, const void 
 static herr_t H5O_mtime_reset(void *_mesg);
 static herr_t H5O_mtime_free(void *_mesg);
 static herr_t H5O_mtime_debug(H5F_t *f, hid_t dxpl_id, const void *_mesg, FILE *stream,
-			     int indent, int fwidth);
+           int indent, int fwidth);
 
 /* This message derives from H5O message class */
 const H5O_msg_class_t H5O_MSG_MTIME[1] = {{
@@ -126,8 +127,8 @@ H5O_mtime_new_decode(H5F_t H5_ATTR_UNUSED *f, hid_t H5_ATTR_UNUSED dxpl_id, H5O_
     unsigned H5_ATTR_UNUSED mesg_flags, unsigned H5_ATTR_UNUSED *ioflags, const uint8_t *p)
 {
     time_t	*mesg;
-    uint32_t    tmp_time;       /* Temporary copy of the time */
-    void        *ret_value;     /* Return value */
+    uint32_t    tmp_time;               /* Temporary copy of the time */
+    void        *ret_value = NULL;      /* Return value */
 
     FUNC_ENTER_NOAPI_NOINIT
 
@@ -147,7 +148,7 @@ H5O_mtime_new_decode(H5F_t H5_ATTR_UNUSED *f, hid_t H5_ATTR_UNUSED dxpl_id, H5O_
 
     /* The return value */
     if (NULL==(mesg = H5FL_MALLOC(time_t)))
-	HGOTO_ERROR(H5E_RESOURCE, H5E_NOSPACE, NULL, "memory allocation failed");
+  HGOTO_ERROR(H5E_RESOURCE, H5E_NOSPACE, NULL, "memory allocation failed");
     *mesg = (time_t)tmp_time;
 
     /* Set return value */
@@ -184,7 +185,7 @@ H5O_mtime_decode(H5F_t H5_ATTR_UNUSED *f, hid_t H5_ATTR_UNUSED dxpl_id, H5O_t H5
     time_t	*mesg, the_time;
     int	i;
     struct tm	tm;
-    void        *ret_value;     /* Return value */
+    void        *ret_value = NULL;      /* Return value */
 
     FUNC_ENTER_NOAPI_NOINIT
 
@@ -211,7 +212,7 @@ H5O_mtime_decode(H5F_t H5_ATTR_UNUSED *f, hid_t H5_ATTR_UNUSED dxpl_id, H5O_t H5
      */
     HDmemset(&tm, 0, sizeof tm);
     tm.tm_year = (p[0]-'0')*1000 + (p[1]-'0')*100 +
-		 (p[2]-'0')*10 + (p[3]-'0') - 1900;
+     (p[2]-'0')*10 + (p[3]-'0') - 1900;
     tm.tm_mon = (p[4]-'0')*10 + (p[5]-'0') - 1;
     tm.tm_mday = (p[6]-'0')*10 + (p[7]-'0');
     tm.tm_hour = (p[8]-'0')*10 + (p[9]-'0');
@@ -225,8 +226,7 @@ H5O_mtime_decode(H5F_t H5_ATTR_UNUSED *f, hid_t H5_ATTR_UNUSED dxpl_id, H5O_t H5
     /* BSD-like systems */
     the_time += tm.tm_gmtoff;
 #elif defined(H5_HAVE_TIMEZONE)
-    /* GNU/Linux systems */
-    the_time -= timezone - (tm.tm_isdst ? 3600 : 0);
+    the_time -= HDgettimezone() - (tm.tm_isdst ? 3600 : 0);
 #else
     /*
      * The catch-all.  If we can't convert a character string universal
@@ -322,8 +322,8 @@ H5O_mtime_encode(H5F_t H5_ATTR_UNUSED *f, hbool_t H5_ATTR_UNUSED disable_shared,
     /* encode */
     tm = HDgmtime(mesg);
     sprintf((char*)p, "%04d%02d%02d%02d%02d%02d",
-	    1900+tm->tm_year, 1+tm->tm_mon, tm->tm_mday,
-	    tm->tm_hour, tm->tm_min, tm->tm_sec);
+      1900+tm->tm_year, 1+tm->tm_mon, tm->tm_mday,
+      tm->tm_hour, tm->tm_min, tm->tm_sec);
 
     FUNC_LEAVE_NOAPI(SUCCEED)
 }
@@ -352,7 +352,7 @@ H5O_mtime_copy(const void *_mesg, void *_dest)
 {
     const time_t	*mesg = (const time_t *) _mesg;
     time_t		*dest = (time_t *) _dest;
-    void        *ret_value;     /* Return value */
+    void                *ret_value = NULL;      /* Return value */
 
     FUNC_ENTER_NOAPI_NOINIT
 
@@ -506,7 +506,7 @@ H5O_mtime_free(void *mesg)
  */
 static herr_t
 H5O_mtime_debug(H5F_t H5_ATTR_UNUSED *f, hid_t H5_ATTR_UNUSED dxpl_id, const void *_mesg, FILE *stream,
-		int indent, int fwidth)
+    int indent, int fwidth)
 {
     const time_t	*mesg = (const time_t *)_mesg;
     struct tm		*tm;
@@ -526,7 +526,7 @@ H5O_mtime_debug(H5F_t H5_ATTR_UNUSED *f, hid_t H5_ATTR_UNUSED dxpl_id, const voi
 
     HDstrftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S %Z", tm);
     HDfprintf(stream, "%*s%-*s %s\n", indent, "", fwidth,
-	    "Time:", buf);
+      "Time:", buf);
 
     FUNC_LEAVE_NOAPI(SUCCEED)
 }

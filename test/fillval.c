@@ -845,7 +845,7 @@ test_rdwr_cases(hid_t file, hid_t dcpl, const char *dname, void *_fillval,
     if(datatype==H5T_INTEGER) {
         /*check for overflow*/
         HDassert((nelmts * sizeof(int)) == (hsize_t)((size_t)(nelmts * sizeof(int))));
-        buf = HDmalloc((size_t)(nelmts * sizeof(int)));
+        buf = (int *)HDmalloc((size_t)(nelmts * sizeof(int)));
 
         if(H5Dread(dset1, H5T_NATIVE_INT, mspace, fspace, H5P_DEFAULT, buf) < 0)
             goto error;
@@ -2368,7 +2368,7 @@ main(int argc, char *argv[])
 {
     int	nerrors=0, argno, test_contig=1, test_chunk=1, test_compact=1;
     hid_t	fapl = (-1), fapl2 = (-1);    /* File access property lists */
-    hbool_t new_format;     /* Whether to use the new format or not */
+    unsigned new_format;     /* Whether to use the new format or not */
 
     if(argc >= 2) {
         test_contig = test_chunk = test_compact = 0;
