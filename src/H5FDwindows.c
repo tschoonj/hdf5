@@ -22,9 +22,29 @@
 #include "H5MMprivate.h"    /* Memory management        */
 #include "H5Pprivate.h"     /* Property lists           */
 
+#include <stdio.h>
+
 #ifdef H5_HAVE_WINDOWS
 
-
+int _open_utf8(const char *name, int oflag, ...)
+{
+    va_list args;
+    int fd = -1;
+    int name_len = MultiByteToWideChar(CP_UTF8, 0, name, -1, NULL, 0);
+    wchar_t* wname = malloc(sizeof(wchar_t)*(name_len + 1));
+    MultiByteToWideChar(CP_UTF8, 0, name, -1, wname, name_len + 1);
+    if (oflag & _O_CREAT) {
+        va_start(args, oflag);
+        fd = _wopen(wname, oflag, va_arg(args, int));
+        va_end(args);
+    }
+    else {
+        fd = _wopen(wname, oflag);
+    }
+    free(wname);
+    return fd;
+}
+
 /*-------------------------------------------------------------------------
  * Function:    H5Pset_fapl_windows
  *

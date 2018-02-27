@@ -56,9 +56,9 @@ typedef __int64             h5_stat_size_t;
  */
 #ifdef H5_HAVE_MINGW
   /* GCC/MINGW uses a different extension to handle unused ellipses */
-  #define HDopen(S,F,...)       _open(S, F | _O_BINARY, ##__VA_ARGS__)
+  #define HDopen(S,F,...)     _open_utf8(S, F | _O_BINARY, ##__VA_ARGS__)
 #else
-  #define HDopen(S,F,...)       _open(S, F | _O_BINARY, __VA_ARGS__)
+  #define HDopen(S,F,...)     _open_utf8(S, F | _O_BINARY, __VA_ARGS__)
 #endif
 #define HDread(F,M,Z)       _read(F,M,Z)
 #define HDrmdir(S)          _rmdir(S)
@@ -137,6 +137,7 @@ extern "C" {
     H5_DLL long Wlroundf(float arg);
     H5_DLL double Wround(double arg);
     H5_DLL float Wroundf(float arg);
+    H5_DLL int _open_utf8(const char *name, int oflag, ...);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
