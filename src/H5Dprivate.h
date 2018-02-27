@@ -206,5 +206,6 @@ H5_DLL herr_t H5D_virtual_free_parsed_name(H5O_storage_virtual_name_seg_t *name_
 H5_DLL herr_t H5D_btree_debug(H5F_t *f, hid_t dxpl_id, haddr_t addr, FILE * stream,
     int indent, int fwidth, unsigned ndims, const uint32_t *dim);
 
+H5_DLL herr_t H5D__layout_set_version(H5F_t *f, H5O_layout_t *layout);
 #endif /* _H5Dprivate_H */
 
