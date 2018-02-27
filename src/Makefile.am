@@ -116,6 +116,10 @@ libhdf5_la_SOURCES= H5.c H5checksum.c H5dbg.c H5system.c H5timer.c H5trace.c \
         H5Zdeflate.c H5Zfletcher32.c H5Znbit.c H5Zshuffle.c \
         H5Zscaleoffset.c H5Zszip.c H5Ztrans.c
 
+if BUILD_MINGW
+libhdf5_la_SOURCES+= H5FDwindows.c
+endif
+
 # Only compile parallel sources if necessary
 if BUILD_PARALLEL_CONDITIONAL
     libhdf5_la_SOURCES += H5ACmpio.c H5Cmpio.c H5Dmpio.c H5Fmpi.c H5FDmpi.c H5FDmpio.c H5Smpio.c
@@ -139,6 +143,10 @@ include_HEADERS = hdf5.h H5api_adpt.h H5overflow.h H5pubconf.h H5public.h H5vers
         H5PLextern.h H5PLpublic.h \
         H5Rpublic.h H5Spublic.h \
         H5Tpublic.h H5Zpublic.h
+
+if BUILD_MINGW
+include_HEADERS+= H5FDwindows.h
+endif
 
 # install libhdf5.settings in lib directory
 settingsdir=$(libdir)

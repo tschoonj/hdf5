@@ -1066,6 +1066,7 @@ case $host_os in
 esac
 
 ## Windows
+UNAME_MINGW="no"
 case "`uname`" in
   CYGWIN*)
     AC_CHECK_HEADERS([io.h sys/timeb.h])
@@ -1074,11 +1075,18 @@ case "`uname`" in
   MINGW*)
     AC_CHECK_HEADERS([io.h winsock2.h sys/timeb.h])
     AC_HAVE_LIBRARY([ws2_32])
+    UNAME_MINGW="yes"
+    AC_DEFINE([HAVE_WIN32_API], [1], [have win32 api])
+    AC_DEFINE([HAVE_MINGW], [1], [have mingw])
+    AC_DEFINE([HAVE_WINDOWS], [1], [have windows])
+    AC_DEFINE([BUILT_AS_DYNAMIC_LIB], [1], [built as dynamic lib])
     ;;
   *)
     AC_CHECK_HEADERS([io.h winsock2.h sys/timeb.h])
     ;;
 esac
+
+AM_CONDITIONAL([BUILD_MINGW], [test "X$UNAME_MINGW" = "Xyes"])
 
 ## ----------------------------------------------------------------------
 ## Some platforms require that all symbols are resolved when a library

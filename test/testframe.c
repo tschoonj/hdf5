@@ -19,6 +19,13 @@
  *
  */
 
+
+#include "H5pubconf.h"
+#ifdef H5_HAVE_MINGW
+  #define _POSIX
+  #define __USE_MINGW_ALARM
+  #include <io.h>
+#endif
 #include "testhdf5.h"
 
 /*

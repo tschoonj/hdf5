@@ -799,6 +799,10 @@ Wgettimeofday(struct timeval *tv, struct timezone *tz)
  *
  *-------------------------------------------------------------------------
  */
+#ifdef H5_HAVE_MINGW
+// definition of getenv_s is currently missing in MinGW, appears to be a bug
+_CRTIMP errno_t __cdecl getenv_s(size_t *pReturnValue, char *buffer, size_t numberOfElements, const char *varname);
+#endif
 int
 Wsetenv(const char *name, const char *value, int overwrite)
 {
